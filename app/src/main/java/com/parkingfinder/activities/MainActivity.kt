@@ -1,9 +1,10 @@
-package com.parkingfinder
+package com.parkingfinder.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.parkingfinder.R
 import com.parkingfinder.fragments.LoginRegister
 
 class MainActivity : AppCompatActivity() {
