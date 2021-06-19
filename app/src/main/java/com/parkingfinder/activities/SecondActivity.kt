@@ -1,34 +1,28 @@
 package com.parkingfinder.activities
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.parkingfinder.R
 import com.parkingfinder.fragments.LoginRegister
+import com.parkingfinder.fragments.ParkingList
+import com.parkingfinder.interfaces.ActivityFragmentCommunication
 
-class MainActivity : AppCompatActivity() {
+class SecondActivity: AppCompatActivity(), ActivityFragmentCommunication {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        addLoginRegisterFragment()
-       // openSecondActivity()
-
+        setContentView(R.layout.activity_second)
+        addParkingListFragment()
     }
 
-    fun addLoginRegisterFragment() {
+    fun addParkingListFragment() {
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-        val tag: String = LoginRegister::class.java.getName()
+        val tag: String = ParkingList::class.java.getName()
         val addTransaction: FragmentTransaction = transaction.add(
-            R.id.frame_layout, LoginRegister(), tag
+            R.id.frame_layout_second, ParkingList(), tag
         )
         addTransaction.commit()
-    }
-    fun openSecondActivity() {
-        val intent = Intent(this, SecondActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 }

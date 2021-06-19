@@ -1,21 +1,25 @@
 package com.parkingfinder.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.parkingfinder.R
-import com.parkingfinder.interfaces.ActivityFragmentCommunication
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.parkingfinder.R
+import com.parkingfinder.activities.MainActivity
+import com.parkingfinder.activities.SecondActivity
+import com.parkingfinder.interfaces.ActivityFragmentCommunication
+
 
 class LoginRegister : Fragment() {
     private var activityFragmentCommunication: ActivityFragmentCommunication? = null
@@ -41,7 +45,7 @@ class LoginRegister : Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(tag, "createUserWithEmail:success")
-                        val user = Firebase.auth.currentUser
+                        openSecondActivity()
                     } else {
                         try {
                             throw task.exception!!
@@ -49,7 +53,7 @@ class LoginRegister : Fragment() {
                             et_password?.setError("Password is too weak! Minimum 6 characters required.");
                             et_password?.requestFocus();
                         } catch (e: FirebaseAuthUserCollisionException) {
-                            et_email?.setError("E-mail is used already!");
+                            et_email?.setError("E-mail is already in use!");
                             et_email?.requestFocus();
                         } catch (e: FirebaseAuthInvalidCredentialsException) {
                             et_email?.setError("Invalid e-mail!");
@@ -73,27 +77,37 @@ class LoginRegister : Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(tag, "signInWithEmail:success")
-                        val user = Firebase.auth.currentUser
+                        openSecondActivity()
                     } else {
                         try {
                             throw task.exception!!
-                        } catch (e: FirebaseAuthInvalidCredentialsException) {
-                            Toast.makeText(context, "Invalid password!", Toast.LENGTH_SHORT)
-                                .show()
                         } catch (e: FirebaseAuthInvalidUserException) {
                             et_email?.setError("This account does not exist!");
                             et_email?.requestFocus();
+                        } catch (e: FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(
+                                context,
+                                "Invalid e-mail/password!",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
                         } catch (e: FirebaseTooManyRequestsException) {
                             Toast.makeText(
                                 context,
                                 "We have blocked all requests from this device due to unusual activity. Try again later.",
-                                Toast.LENGTH_SHORT
+                                Toast.LENGTH_LONG
                             )
                                 .show()
                         }
                     }
                 }
         }
+    }
+
+    private fun openSecondActivity() {
+        val intent = Intent(context, SecondActivity::class.java)
+        activity?.startActivity(intent)
+        activity?.finish()
     }
 
     override fun onCreateView(
