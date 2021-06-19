@@ -23,11 +23,12 @@
         android:layout_height="wrap_content"
         android:hint="@string/et_email"
         android:inputType="text"
+        android:textSize="@dimen/et_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintWidth_percent="0.8" />
 
     <EditText
         android:id="@+id/et_password"
@@ -35,10 +36,11 @@
         android:layout_height="wrap_content"
         android:hint="@string/et_password"
         android:inputType="textPassword"
+        android:textSize="@dimen/et_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_email"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintWidth_percent="0.8" />
 
 
     <LinearLayout

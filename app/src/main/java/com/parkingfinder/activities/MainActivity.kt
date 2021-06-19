@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.firebase.auth.FirebaseAuth
 import com.parkingfinder.R
 import com.parkingfinder.fragments.LoginRegister
 

@@ -1,32 +1,98 @@
 package com.parkingfinder.fragments
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.parkingfinder.R
+import com.parkingfinder.interfaces.ActivityFragmentCommunication
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.*
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LoginRegister.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LoginRegister : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var activityFragmentCommunication: ActivityFragmentCommunication? = null
+    private var btn_register: Button? = null
+    private var btn_login: Button? = null
+    private var et_email: EditText? = null
+    private var et_password: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    }
+
+    fun register(email: String, password: String) {
+        if (email.isNullOrEmpty()) {
+            et_email?.setError("E-mail can't be empty!");
+            et_email?.requestFocus();
+        } else if (password.isNullOrEmpty()) {
+            et_password?.setError("Password can't be empty!");
+            et_password?.requestFocus();
+        } else {
+            val tag = "Register"
+            Firebase.auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(tag, "createUserWithEmail:success")
+                        val user = Firebase.auth.currentUser
+                    } else {
+                        try {
+                            throw task.exception!!
+                        } catch (e: FirebaseAuthWeakPasswordException) {
+                            et_password?.setError("Password is too weak! Minimum 6 characters required.");
+                            et_password?.requestFocus();
+                        } catch (e: FirebaseAuthUserCollisionException) {
+                            et_email?.setError("E-mail is used already!");
+                            et_email?.requestFocus();
+                        } catch (e: FirebaseAuthInvalidCredentialsException) {
+                            et_email?.setError("Invalid e-mail!");
+                            et_email?.requestFocus();
+                        }
+                    }
+                }
+        }
+    }
+
+    fun login(email: String, password: String) {
+        if (email.isNullOrEmpty()) {
+            et_email?.setError("E-mail can't be empty!");
+            et_email?.requestFocus();
+        } else if (password.isNullOrEmpty()) {
+            et_password?.setError("Password can't be empty!");
+            et_password?.requestFocus();
+        } else {
+            val tag = "Login"
+            Firebase.auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(tag, "signInWithEmail:success")
+                        val user = Firebase.auth.currentUser
+                    } else {
+                        try {
+                            throw task.exception!!
+                        } catch (e: FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(context, "Invalid password!", Toast.LENGTH_SHORT)
+                                .show()
+                        } catch (e: FirebaseAuthInvalidUserException) {
+                            et_email?.setError("This account does not exist!");
+                            et_email?.requestFocus();
+                        } catch (e: FirebaseTooManyRequestsException) {
+                            Toast.makeText(
+                                context,
+                                "We have blocked all requests from this device due to unusual activity. Try again later.",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
+                }
         }
     }
 
@@ -34,27 +100,32 @@ class LoginRegister : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login_register, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_login_register, container, false)
+        btn_register = view.findViewById(R.id.btn_register)
+        btn_login = view.findViewById(R.id.btn_login)
+        et_email = view.findViewById(R.id.et_email)
+        et_password = view.findViewById(R.id.et_password)
+        return view;
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LoginRegister.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoginRegister().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = LoginRegister()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        btn_register?.setOnClickListener {
+            register(et_email?.text.toString(), et_password?.text.toString())
+        }
+        btn_login?.setOnClickListener {
+            login(et_email?.text.toString(), et_password?.text.toString())
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is ActivityFragmentCommunication) {
+            activityFragmentCommunication = context
+        }
     }
 }
