@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "72525733060",
+    "project_id": "parkingfinder-a811f",
+    "storage_bucket": "parkingfinder-a811f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72525733060:android:56a8f7b24f163ea8187d91",
+        "android_client_info": {
+          "package_name": "com.parkingfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72525733060-fcj78877q3a88ljr4fojbc97nar4pqgq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtaNyeWbJu_cdNJrNKliHwP7ADVLgOFsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72525733060-fcj78877q3a88ljr4fojbc97nar4pqgq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
