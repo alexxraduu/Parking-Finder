@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         addLoginRegisterFragment()
-       // openSecondActivity()
-
     }
 
     fun addLoginRegisterFragment() {
@@ -25,10 +23,5 @@ class MainActivity : AppCompatActivity() {
             R.id.frame_layout, LoginRegister(), tag
         )
         addTransaction.commit()
-    }
-    fun openSecondActivity() {
-        val intent = Intent(this, SecondActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 }

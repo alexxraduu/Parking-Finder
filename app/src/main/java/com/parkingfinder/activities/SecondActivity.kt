@@ -5,11 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.parkingfinder.R
-import com.parkingfinder.fragments.LoginRegister
 import com.parkingfinder.fragments.ParkingList
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 
-class SecondActivity: AppCompatActivity(), ActivityFragmentCommunication {
+
+class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
