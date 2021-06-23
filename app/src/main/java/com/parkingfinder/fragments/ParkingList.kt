@@ -1,13 +1,13 @@
 package com.parkingfinder.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
+import android.content.pm.PackageManager
+import android.location.*
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Button
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +16,8 @@ import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
@@ -29,15 +31,17 @@ import java.util.*
 
 
 class ParkingList : Fragment() {
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     var activityFragmentCommunication: ActivityFragmentCommunication? = null
-    var btn: Button? = null
     var toolbar: Toolbar? = null
     var parkingList: ArrayList<ParkingLot> = ArrayList<ParkingLot>()
     var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList)
-    var currentLocation: String ="Brasov"
+    var currentCity: String? = null
+    var currentCoordinates: GeoPoint? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
     }
 
     override fun onCreateView(
@@ -45,6 +49,7 @@ class ParkingList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_parking_list, container, false)
+
         toolbar = view.findViewById<View>(R.id.toolbar) as Toolbar
         val activity = activity as AppCompatActivity?
         activity!!.setSupportActionBar(toolbar)
@@ -56,15 +61,20 @@ class ParkingList : Fragment() {
         return view
     }
 
+    fun updateToolbarTitle() {
+        toolbar?.title = currentCity!!.toUpperCase()
+    }
+
+    @SuppressLint("MissingPermission")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_toolbar, menu)
-        val searchItem = menu!!.findItem(R.id.search)
+        val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = MenuItemCompat.getActionView(searchItem) as SearchView
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                toolbar?.title = searchView.query.toString()
-                currentLocation= searchView.query.toString()
+                currentCity = searchView.query.toString().toLowerCase()
+                updateToolbarTitle()
                 getDataExample()
                 return false
             }
@@ -74,9 +84,23 @@ class ParkingList : Fragment() {
             }
         })
 
-        val down = menu!!.findItem(R.id.item_logout)
-        down.setOnMenuItemClickListener {
+        val logoutItem = menu!!.findItem(R.id.item_logout)
+        logoutItem.setOnMenuItemClickListener {
             logout()
+            false
+        }
+
+        val locate = menu!!.findItem(R.id.action_locate)
+        locate.setOnMenuItemClickListener {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    val geoCoder = Geocoder(context, Locale.getDefault())
+                    var addresses: List<Address> =
+                        geoCoder.getFromLocation(location!!.latitude, location!!.longitude, 1)
+                    currentCity = addresses.get(0).locality.toLowerCase()
+                    getDataExample()
+                    updateToolbarTitle()
+                }
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -91,7 +115,7 @@ class ParkingList : Fragment() {
         if (Firebase.auth.currentUser?.email.isNullOrEmpty()) {
             Toast.makeText(
                 context,
-                "Logged out",
+                "Logged out successfully!",
                 Toast.LENGTH_LONG
             )
                 .show()
@@ -100,22 +124,26 @@ class ParkingList : Fragment() {
         activity?.startActivity(intent)
         activity?.finish()
     }
-    fun getDataExample(){
 
-        val tag="testfirebase"
-        val db= FirebaseFirestore.getInstance()
+    fun getDataExample() {
+        val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot")
-            .whereEqualTo("city",currentLocation)
+            .whereEqualTo("city", currentCity)
             .get()
-            .addOnSuccessListener{documents->
+            .addOnSuccessListener { documents ->
                 parkingList.clear()
-                for(document in documents){
-                    parkingList.add(ParkingLot(document["description"] as String, document["coordinates"] as GeoPoint))
+                for (document in documents) {
+                    parkingList.add(
+                        ParkingLot(
+                            document["description"] as String,
+                            document["coordinates"] as GeoPoint
+                        )
+                    )
                 }
                 parkingAdapter.notifyDataSetChanged()
             }
-            .addOnFailureListener{exception->
-                Log.w(tag,"Error getting documents:",exception)
+            .addOnFailureListener { exception ->
+                Log.w("FIREBASE", "Error getting documents:", exception)
             }
     }
 
@@ -129,5 +157,4 @@ class ParkingList : Fragment() {
             activityFragmentCommunication = context
         }
     }
-
 }
