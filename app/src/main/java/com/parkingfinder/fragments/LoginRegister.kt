@@ -50,13 +50,13 @@ class LoginRegister : Fragment() {
                         try {
                             throw task.exception!!
                         } catch (e: FirebaseAuthWeakPasswordException) {
-                            et_password?.setError("Password is too weak! Minimum 6 characters required.");
+                            et_password?.error = "Password is too weak! Minimum 6 characters required.";
                             et_password?.requestFocus();
                         } catch (e: FirebaseAuthUserCollisionException) {
-                            et_email?.setError("E-mail is already in use!");
+                            et_email?.error = "E-mail is already in use!";
                             et_email?.requestFocus();
                         } catch (e: FirebaseAuthInvalidCredentialsException) {
-                            et_email?.setError("Invalid e-mail!");
+                            et_email?.error = "Invalid e-mail!";
                             et_email?.requestFocus();
                         }
                     }
@@ -66,10 +66,10 @@ class LoginRegister : Fragment() {
 
     fun login(email: String, password: String) {
         if (email.isNullOrEmpty()) {
-            et_email?.setError("E-mail can't be empty!");
+            et_email?.error = "E-mail can't be empty!";
             et_email?.requestFocus();
         } else if (password.isNullOrEmpty()) {
-            et_password?.setError("Password can't be empty!");
+            et_password?.error = "Password can't be empty!";
             et_password?.requestFocus();
         } else {
             val tag = "Login"
@@ -82,7 +82,7 @@ class LoginRegister : Fragment() {
                         try {
                             throw task.exception!!
                         } catch (e: FirebaseAuthInvalidUserException) {
-                            et_email?.setError("This account does not exist!");
+                            et_email?.error = "This account does not exist!";
                             et_email?.requestFocus();
                         } catch (e: FirebaseAuthInvalidCredentialsException) {
                             Toast.makeText(

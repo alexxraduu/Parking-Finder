@@ -3,11 +3,12 @@ package com.parkingfinder.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.*
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,27 +22,42 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import com.parkingfinder.R
 import com.parkingfinder.activities.MainActivity
 import com.parkingfinder.adapters.ParkingLotAdapter
+import com.parkingfinder.helper.LocationOperations.Companion.getCity
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
+import com.parkingfinder.interfaces.OnItemClickedListener
 import com.parkingfinder.models.ParkingLot
 import java.util.*
 
 
 class ParkingList : Fragment() {
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var activityFragmentCommunication: ActivityFragmentCommunication? = null
     var toolbar: Toolbar? = null
     var parkingList: ArrayList<ParkingLot> = ArrayList<ParkingLot>()
-    var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList)
+    var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList,
+        object : OnItemClickedListener {
+            override fun openMaps(location: GeoPoint?) {
+                Log.d("aaa", "merge")
+                val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                startActivity(mapIntent)
+            }
+
+
+        })
     var currentCity: String? = null
-    var currentCoordinates: GeoPoint? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+
     }
 
     override fun onCreateView(
@@ -94,10 +110,10 @@ class ParkingList : Fragment() {
         locate.setOnMenuItemClickListener {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
-                    val geoCoder = Geocoder(context, Locale.getDefault())
-                    var addresses: List<Address> =
-                        geoCoder.getFromLocation(location!!.latitude, location!!.longitude, 1)
-                    currentCity = addresses.get(0).locality.toLowerCase()
+                    currentCity = getCity(
+                        GeoPoint(location!!.latitude, location!!.longitude),
+                        context
+                    ).toLowerCase()
                     getDataExample()
                     updateToolbarTitle()
                 }
@@ -123,6 +139,8 @@ class ParkingList : Fragment() {
         val intent = Intent(context, MainActivity::class.java)
         activity?.startActivity(intent)
         activity?.finish()
+
+
     }
 
     fun getDataExample() {

@@ -3,4 +3,5 @@
     <dimen name="size_description">20sp</dimen>
     <dimen name="default_space">16dp</dimen>
     <dimen name="default_padding">8dp</dimen>
+    <dimen name="size_address">25sp</dimen>
 </resources>

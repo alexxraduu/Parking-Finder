@@ -1,7 +1,9 @@
 package com.parkingfinder.activities
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -19,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         addLoginRegisterFragment()
     }
 
-    fun checkPermissions() {
+    private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -38,10 +40,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun addLoginRegisterFragment() {
+    private fun addLoginRegisterFragment() {
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-        val tag: String = LoginRegister::class.java.getName()
+        val tag: String = LoginRegister::class.java.name
         val addTransaction: FragmentTransaction = transaction.add(
             R.id.frame_layout, LoginRegister(), tag
         )

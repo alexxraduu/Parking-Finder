@@ -16,13 +16,14 @@ class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
         addParkingListFragment()
     }
 
-    fun addParkingListFragment() {
+    private fun addParkingListFragment() {
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-        val tag: String = ParkingList::class.java.getName()
+        val tag: String = ParkingList::class.java.name
         val addTransaction: FragmentTransaction = transaction.add(
             R.id.frame_layout_second, ParkingList(), tag
         )
         addTransaction.commit()
     }
+
 }
