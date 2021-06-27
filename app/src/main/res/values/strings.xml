@@ -13,4 +13,8 @@
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
     <string name="default_city_name">City name</string>
+
+    <!--  View parking-lot -->
+    <string name="report_not_existing">Parking lot is not there...</string>
+    <string name="edit_parking_lot">Edit</string>
 </resources>

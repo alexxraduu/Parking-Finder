@@ -4,4 +4,9 @@
     <dimen name="default_space">16dp</dimen>
     <dimen name="default_padding">8dp</dimen>
     <dimen name="size_address">25sp</dimen>
+
+    <!--  View parking-lot -->
+    <dimen name="vpl_items_margin">15dp</dimen>
+    <dimen name="vpl_tv_view_address">20sp</dimen>
+    <dimen name="vpl_tv_view_description">17sp</dimen>
 </resources>

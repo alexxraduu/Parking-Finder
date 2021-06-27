@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_view_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/vpl_items_margin"
+                android:textSize="@dimen/vpl_tv_view_address"
+                tool:text="Address" />
+
+            <TextView
+                android:id="@+id/tv_view_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/vpl_items_margin"
+                android:textSize="@dimen/vpl_tv_view_description"
+                tool:text="Description" />
+
+            <TextView
+                android:id="@+id/tv_view_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/vpl_items_margin"
+                tool:text="This parking-lot is private" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/vpl_items_margin"
+                android:background="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/tv_view_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/vpl_items_margin"
+                android:text="@string/edit_parking_lot"
+                android:textColor="@color/gradient_dark_blue"
+                android:textColorHint="@color/gradient_dark_blue" />
+
+            <TextView
+                android:id="@+id/tv_view_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/vpl_items_margin"
+                android:text="@string/report_not_existing"
+                android:textColor="@color/gradient_dark_blue"
+                android:textColorHint="@color/gradient_dark_blue" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
