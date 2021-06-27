@@ -25,8 +25,10 @@ import com.parkingfinder.R
 import com.parkingfinder.activities.MainActivity
 import com.parkingfinder.activities.ThirdActivity
 import com.parkingfinder.adapters.ParkingLotAdapter
+import com.parkingfinder.helper.LocationOperations
 import com.parkingfinder.helper.LocationOperations.Companion.getAddress
-import com.parkingfinder.helper.LocationOperations.Companion.getCity
+import com.parkingfinder.helper.LocationOperations.Companion.getLocality
+import com.parkingfinder.helper.LocationOperations.Companion.myLocation
 import com.parkingfinder.helper.LocationOperations.Companion.openGoogleMaps
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.interfaces.OnItemClickedListener
@@ -35,7 +37,6 @@ import java.util.*
 
 
 class ParkingList : Fragment() {
-
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var activityFragmentCommunication: ActivityFragmentCommunication? = null
     var toolbar: Toolbar? = null
@@ -52,7 +53,7 @@ class ParkingList : Fragment() {
 
 
         })
-    var currentCity: String? = null
+    var currentLocality: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +75,7 @@ class ParkingList : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = parkingAdapter
 
-        val btn_add= view.findViewById<View>(R.id.btn_add_parking)
+        val btn_add = view.findViewById<View>(R.id.btn_add_parking)
         btn_add.setOnClickListener {
             val intent = Intent(context, ThirdActivity::class.java)
             activity?.startActivity(intent)
@@ -84,10 +85,9 @@ class ParkingList : Fragment() {
     }
 
     fun updateToolbarTitle() {
-        toolbar?.title = currentCity!!.toUpperCase()
+        toolbar?.title = currentLocality!!.toUpperCase()
     }
 
-    @SuppressLint("MissingPermission")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_toolbar, menu)
         val searchItem = menu.findItem(R.id.search)
@@ -95,7 +95,7 @@ class ParkingList : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                currentCity = searchView.query.toString().toLowerCase()
+                currentLocality = searchView.query.toString().toLowerCase()
                 updateToolbarTitle()
                 getDataExample()
                 return false
@@ -112,20 +112,31 @@ class ParkingList : Fragment() {
             false
         }
 
-        val locate = menu!!.findItem(R.id.action_locate)
+        var locate = menu!!.findItem(R.id.action_locate)
         locate.setOnMenuItemClickListener {
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    currentCity = getCity(
-                        GeoPoint(location!!.latitude, location.longitude),
-                        context
-                    ).toLowerCase()
-                    getDataExample()
-                    updateToolbarTitle()
-                }
+            getLocation()
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                myLocation =
+                    GeoPoint(location!!.latitude, location.longitude)
+                showResults()
+            }
+    }
+
+    private fun showResults() {
+        currentLocality = getLocality(
+            myLocation,
+            context
+        ).toLowerCase()
+        getDataExample()
+        updateToolbarTitle()
     }
 
     companion object {
@@ -145,14 +156,12 @@ class ParkingList : Fragment() {
         val intent = Intent(context, MainActivity::class.java)
         activity?.startActivity(intent)
         activity?.finish()
-
-
     }
 
     fun getDataExample() {
         val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot")
-            .whereEqualTo("locality", currentCity)
+            .whereEqualTo("locality", currentLocality)
             .get()
             .addOnSuccessListener { documents ->
                 parkingList.clear()
@@ -168,6 +177,7 @@ class ParkingList : Fragment() {
                         )
                     )
                 }
+                sortResults()
                 parkingAdapter.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
@@ -175,8 +185,26 @@ class ParkingList : Fragment() {
             }
     }
 
+    private fun distance(parkingLot: ParkingLot): Int {
+        return LocationOperations.distanceBetweenGeoPoints(
+            parkingLot.coordinates!!,
+            myLocation
+        )
+    }
+
+    private fun sortResults() {
+        parkingList.sortWith { p1, p2 ->
+            when {
+                distance(p1) > distance(p2) -> 1
+                distance(p1) == distance(p2) -> 0
+                else -> -1
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getLocation()
     }
 
     override fun onAttach(context: Context) {
@@ -186,3 +214,4 @@ class ParkingList : Fragment() {
         }
     }
 }
+

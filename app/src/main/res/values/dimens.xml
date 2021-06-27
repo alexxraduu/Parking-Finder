@@ -11,4 +11,5 @@
     <dimen name="vpl_tv_view_description">18sp</dimen>
     <dimen name="vpl_tv_view_report">18sp</dimen>
     <dimen name="vpl_tv_view_navigate">18sp</dimen>
+    <dimen name="size_distance">15sp</dimen>
 </resources>

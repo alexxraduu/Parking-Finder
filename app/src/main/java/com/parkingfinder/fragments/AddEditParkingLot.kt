@@ -19,7 +19,6 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
@@ -118,7 +117,7 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
     fun createParkingLotObject() {
         parkingLot = ParkingLot(
             Firebase.auth.currentUser!!.uid,
-            LocationOperations.getCity(coordinates, context),
+            LocationOperations.getLocality(coordinates, context),
             coordinates,
             null,
             editDescription!!.text.toString(),

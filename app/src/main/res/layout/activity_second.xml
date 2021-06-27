@@ -12,8 +12,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-
         <FrameLayout
             android:id="@+id/frame_layout_second"
             android:layout_width="match_parent"

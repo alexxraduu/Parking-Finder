@@ -9,12 +9,14 @@ import android.location.Location
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.firestore.GeoPoint
+import com.parkingfinder.models.ParkingLot
 import java.util.*
 
 class LocationOperations {
 
 
     companion object {
+        var myLocation: GeoPoint =  GeoPoint(0.0,0.0)
         fun openGoogleMaps(location: GeoPoint, context: Context?) {
             val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
@@ -22,7 +24,7 @@ class LocationOperations {
             context?.startActivity(mapIntent)
         }
 
-        fun getCity(geoPoint: GeoPoint, context: Context?): String {
+        fun getLocality(geoPoint: GeoPoint, context: Context?): String {
             val geoCoder = Geocoder(context, Locale.getDefault())
             var addresses: List<Address> =
                 geoCoder.getFromLocation(geoPoint!!.latitude, geoPoint!!.longitude, 1)
@@ -34,6 +36,16 @@ class LocationOperations {
             var addresses: List<Address> =
                 geoCoder.getFromLocation(geoPoint!!.latitude, geoPoint!!.longitude, 1)
             return addresses[0].getAddressLine(0).toString()
+        }
+
+        fun distanceBetweenGeoPoints(source: GeoPoint, destination: GeoPoint): Int {
+            val startPoint: Location = Location("")
+            startPoint.latitude = source.latitude
+            startPoint.longitude = source.longitude
+            val endPoint: Location = Location("")
+            endPoint.latitude = destination.latitude
+            endPoint.longitude = destination.longitude
+            return startPoint.distanceTo(endPoint).toInt()
         }
     }
 }
