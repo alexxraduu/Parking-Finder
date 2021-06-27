@@ -6,7 +6,6 @@
     <string name="et_password">Password</string>
     <string name="btn_login">Login</string>
     <string name="btn_register">Register</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Search</string>
     <string name="locate">Locate</string>
@@ -15,8 +14,9 @@
     <string name="default_city_name">City name</string>
 
     <!--  View parking-lot -->
-    <string name="report_not_existing">Parking lot is not there…</string>
-    <string name="edit_parking_lot">Edit</string>
+    <string name="report_not_existing">Report as not existing</string>
+    <string name="edit_parking_lot">Edit parking lot</string>
     <string name="private_lot">This parking lot is private</string>
     <string name="public_lot">This parking lot is public</string>
+    <string name="navigate">Open in Google Maps --></string>
 </resources>

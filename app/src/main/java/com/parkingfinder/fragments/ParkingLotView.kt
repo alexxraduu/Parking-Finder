@@ -2,27 +2,31 @@ package com.parkingfinder.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.*
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.google.firebase.firestore.auth.User
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.parkingfinder.R
+import com.parkingfinder.helper.LocationOperations
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.models.ParkingLot
-import org.w3c.dom.Text
-import java.util.*
 
 
-class ParkingLotView(val parkingLot: ParkingLot) : Fragment() {
+class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapReadyCallback {
 
     var activityFragmentCommunication: ActivityFragmentCommunication? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     @SuppressLint("ResourceType")
@@ -31,18 +35,30 @@ class ParkingLotView(val parkingLot: ParkingLot) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_parking_lot, container, false)
-        val tv_address: TextView = view.findViewById(R.id.tv_view_address)
-        val tv_description: TextView = view.findViewById(R.id.tv_view_description)
-        val tv_isPrivate: TextView = view.findViewById(R.id.tv_view_private)
+        val tvAddress: TextView = view.findViewById(R.id.tv_view_address)
+        val tvDescription: TextView = view.findViewById(R.id.tv_view_description)
+        val tvIsPrivate: TextView = view.findViewById(R.id.tv_view_private)
+        val tvNavigate: TextView = view.findViewById(R.id.tv_view_navigate)
 
-        tv_address.text = parkingLot.address
-        tv_description.text = parkingLot.description
+        tvAddress.text = parkingLot.address
+        tvDescription.text = parkingLot.description
 
         when (parkingLot.isPrivate) {
-            true -> tv_isPrivate.text = view.resources.getString(R.string.private_lot)
-            false -> tv_isPrivate.text = view.resources.getString(R.string.public_lot)
+            true -> tvIsPrivate.text = view.resources.getString(R.string.private_lot)
+            false -> tvIsPrivate.text = view.resources.getString(R.string.public_lot)
         }
 
+        // MAP
+        val mapFragment = SupportMapFragment.newInstance()
+        activity?.supportFragmentManager
+            ?.beginTransaction()
+            ?.add(R.id.frame_layout_map, mapFragment)
+            ?.commit()
+        mapFragment.getMapAsync(this)
+
+        tvNavigate.setOnClickListener {
+            LocationOperations.openGoogleMaps(parkingLot.coordinates!!, view.context)
+        }
         return view
     }
 
@@ -54,9 +70,7 @@ class ParkingLotView(val parkingLot: ParkingLot) : Fragment() {
             fragment.arguments = args
             return fragment
         }
-
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,5 +81,21 @@ class ParkingLotView(val parkingLot: ParkingLot) : Fragment() {
         if (context is ActivityFragmentCommunication) {
             activityFragmentCommunication = context
         }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        val coordinates =
+            LatLng(parkingLot.coordinates!!.latitude, parkingLot.coordinates.longitude)
+        val cameraPosition = CameraPosition.Builder()
+            .target(coordinates)
+            .zoom(15f)
+            .build()
+
+        googleMap.addMarker(
+            MarkerOptions()
+                .position(coordinates)
+                .title(parkingLot.address)
+        )
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 }

@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.location.*
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,13 +20,13 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import com.parkingfinder.R
 import com.parkingfinder.activities.MainActivity
 import com.parkingfinder.adapters.ParkingLotAdapter
 import com.parkingfinder.helper.LocationOperations.Companion.getAddress
 import com.parkingfinder.helper.LocationOperations.Companion.getCity
+import com.parkingfinder.helper.LocationOperations.Companion.openGoogleMaps
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.interfaces.OnItemClickedListener
 import com.parkingfinder.models.ParkingLot
@@ -44,16 +42,11 @@ class ParkingList : Fragment() {
     var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList,
         object : OnItemClickedListener {
             override fun openMaps(location: GeoPoint?) {
-                Log.d("aaa", "merge")
-                val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
-                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                mapIntent.setPackage("com.google.android.apps.maps")
-                startActivity(mapIntent)
+                openGoogleMaps(location!!, context)
             }
 
             override fun openParkingLotView(parkingLot: ParkingLot?) {
                 activityFragmentCommunication!!.addParkingLotViewFragment(parkingLot)
-                //Toast.makeText(context,parkingLot!!.locality,Toast.LENGTH_SHORT).show()
             }
 
 
@@ -63,7 +56,6 @@ class ParkingList : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-
     }
 
     override fun onCreateView(
@@ -117,7 +109,7 @@ class ParkingList : Fragment() {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
                     currentCity = getCity(
-                        GeoPoint(location!!.latitude, location!!.longitude),
+                        GeoPoint(location!!.latitude, location.longitude),
                         context
                     ).toLowerCase()
                     getDataExample()

@@ -37,6 +37,23 @@
                 android:layout_margin="@dimen/vpl_items_margin"
                 tool:text="This parking-lot is private" />
 
+            <FrameLayout
+                android:id="@+id/frame_layout_map"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <TextView
+                android:id="@+id/tv_view_navigate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/vpl_items_margin"
+                android:clickable="true"
+                android:text="@string/navigate"
+                android:textColor="@color/gradient_dark_blue"
+                android:textColorHint="@color/gradient_dark_blue"
+                android:textSize="@dimen/vpl_tv_view_navigate"
+                android:textStyle="bold" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -56,11 +73,11 @@
                 android:id="@+id/tv_view_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/vpl_tv_view_report"
                 android:layout_marginLeft="@dimen/vpl_items_margin"
                 android:text="@string/report_not_existing"
                 android:textColor="@color/gradient_dark_blue"
-                android:textColorHint="@color/gradient_dark_blue" />
+                android:textColorHint="@color/gradient_dark_blue"
+                android:textSize="@dimen/vpl_tv_view_report" />
 
 
         </LinearLayout>
