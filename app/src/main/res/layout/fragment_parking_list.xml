@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ParkingList">
+    tools:context=".fragments.ParkingList"
+    android:background="@color/light_blue">
 
     <androidx.appcompat.widget.Toolbar
         app:title="@string/default_city_name"

@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/light_blue">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -55,6 +56,7 @@
                 android:id="@+id/tv_view_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/vpl_tv_view_report"
                 android:layout_marginLeft="@dimen/vpl_items_margin"
                 android:text="@string/report_not_existing"
                 android:textColor="@color/gradient_dark_blue"
