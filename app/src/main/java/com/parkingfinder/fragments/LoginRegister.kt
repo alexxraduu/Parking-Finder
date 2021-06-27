@@ -16,7 +16,6 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.parkingfinder.R
-import com.parkingfinder.activities.MainActivity
 import com.parkingfinder.activities.SecondActivity
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 
@@ -32,75 +31,83 @@ class LoginRegister : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    fun register(email: String, password: String) {
-        if (email.isNullOrEmpty()) {
-            et_email?.setError("E-mail can't be empty!");
-            et_email?.requestFocus();
-        } else if (password.isNullOrEmpty()) {
-            et_password?.setError("Password can't be empty!");
-            et_password?.requestFocus();
-        } else {
-            val tag = "Register"
-            Firebase.auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d(tag, "createUserWithEmail:success")
-                        openSecondActivity()
-                    } else {
-                        try {
-                            throw task.exception!!
-                        } catch (e: FirebaseAuthWeakPasswordException) {
-                            et_password?.error = "Password is too weak! Minimum 6 characters required.";
-                            et_password?.requestFocus();
-                        } catch (e: FirebaseAuthUserCollisionException) {
-                            et_email?.error = "E-mail is already in use!";
-                            et_email?.requestFocus();
-                        } catch (e: FirebaseAuthInvalidCredentialsException) {
-                            et_email?.error = "Invalid e-mail!";
-                            et_email?.requestFocus();
+    private fun register(email: String, password: String) {
+        when {
+            email.isNullOrEmpty() -> {
+                et_email?.error = "E-mail can't be empty!"
+                et_email?.requestFocus()
+            }
+            password.isNullOrEmpty() -> {
+                et_password?.error = "Password can't be empty!"
+                et_password?.requestFocus()
+            }
+            else -> {
+                val tag = "Register"
+                Firebase.auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(tag, "createUserWithEmail:success")
+                            openSecondActivity()
+                        } else {
+                            try {
+                                throw task.exception!!
+                            } catch (e: FirebaseAuthWeakPasswordException) {
+                                et_password?.error = "Password is too weak! Minimum 6 characters required."
+                                et_password?.requestFocus()
+                            } catch (e: FirebaseAuthUserCollisionException) {
+                                et_email?.error = "E-mail is already in use!"
+                                et_email?.requestFocus()
+                            } catch (e: FirebaseAuthInvalidCredentialsException) {
+                                et_email?.error = "Invalid e-mail!"
+                                et_email?.requestFocus()
+                            }
                         }
                     }
-                }
+            }
         }
     }
 
-    fun login(email: String, password: String) {
-        if (email.isNullOrEmpty()) {
-            et_email?.error = "E-mail can't be empty!";
-            et_email?.requestFocus();
-        } else if (password.isNullOrEmpty()) {
-            et_password?.error = "Password can't be empty!";
-            et_password?.requestFocus();
-        } else {
-            val tag = "Login"
-            Firebase.auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d(tag, "signInWithEmail:success")
-                        openSecondActivity()
-                    } else {
-                        try {
-                            throw task.exception!!
-                        } catch (e: FirebaseAuthInvalidUserException) {
-                            et_email?.error = "This account does not exist!";
-                            et_email?.requestFocus();
-                        } catch (e: FirebaseAuthInvalidCredentialsException) {
-                            Toast.makeText(
-                                context,
-                                "Invalid e-mail/password!",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                        } catch (e: FirebaseTooManyRequestsException) {
-                            Toast.makeText(
-                                context,
-                                "We have blocked all requests from this device due to unusual activity. Try again later.",
-                                Toast.LENGTH_LONG
-                            )
-                                .show()
+    private fun login(email: String, password: String) {
+        when {
+            email.isNullOrEmpty() -> {
+                et_email?.error = "E-mail can't be empty!"
+                et_email?.requestFocus()
+            }
+            password.isNullOrEmpty() -> {
+                et_password?.error = "Password can't be empty!"
+                et_password?.requestFocus()
+            }
+            else -> {
+                val tag = "Login"
+                Firebase.auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(tag, "signInWithEmail:success")
+                            openSecondActivity()
+                        } else {
+                            try {
+                                throw task.exception!!
+                            } catch (e: FirebaseAuthInvalidUserException) {
+                                et_email?.error = "This account does not exist!"
+                                et_email?.requestFocus()
+                            } catch (e: FirebaseAuthInvalidCredentialsException) {
+                                Toast.makeText(
+                                    context,
+                                    "Invalid e-mail/password!",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            } catch (e: FirebaseTooManyRequestsException) {
+                                Toast.makeText(
+                                    context,
+                                    "We have blocked all requests from this device due to unusual activity. Try again later.",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
                         }
                     }
-                }
+            }
         }
     }
 
@@ -119,7 +126,7 @@ class LoginRegister : Fragment() {
         btn_login = view.findViewById(R.id.btn_login)
         et_email = view.findViewById(R.id.et_email)
         et_password = view.findViewById(R.id.et_password)
-        return view;
+        return view
     }
 
     companion object {

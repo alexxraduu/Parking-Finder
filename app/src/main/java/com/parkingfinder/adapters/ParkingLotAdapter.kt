@@ -1,11 +1,9 @@
 package com.parkingfinder.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.parkingfinder.R
 import com.parkingfinder.helper.LocationOperations.Companion.getAddress
@@ -41,7 +39,7 @@ class ParkingLotAdapter(private val parkingLots: ArrayList<ParkingLot>, val onIt
 
             description.text = parkingLot.description
             address.text=getAddress(parkingLot.coordinates!!,view.context)
-            view.setOnClickListener { onItemClickedListener.openMaps(parkingLot.coordinates) }
+            view.setOnClickListener { onItemClickedListener.openParkingLotView(parkingLot) }
 
         }
 

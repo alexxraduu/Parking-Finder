@@ -27,6 +27,7 @@ import com.google.firebase.ktx.Firebase
 import com.parkingfinder.R
 import com.parkingfinder.activities.MainActivity
 import com.parkingfinder.adapters.ParkingLotAdapter
+import com.parkingfinder.helper.LocationOperations.Companion.getAddress
 import com.parkingfinder.helper.LocationOperations.Companion.getCity
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.interfaces.OnItemClickedListener
@@ -43,11 +44,16 @@ class ParkingList : Fragment() {
     var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList,
         object : OnItemClickedListener {
             override fun openMaps(location: GeoPoint?) {
-                Log.d("aaa", "merge")
-                val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
-                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                mapIntent.setPackage("com.google.android.apps.maps")
-                startActivity(mapIntent)
+//                Log.d("aaa", "merge")
+//                val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
+//                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+//                mapIntent.setPackage("com.google.android.apps.maps")
+//                startActivity(mapIntent)
+            }
+
+            override fun openParkingLotView(parkingLot: ParkingLot?) {
+                activityFragmentCommunication!!.addParkingLotViewFragment(parkingLot)
+                //Toast.makeText(context,parkingLot!!.locality,Toast.LENGTH_SHORT).show()
             }
 
 
@@ -146,15 +152,19 @@ class ParkingList : Fragment() {
     fun getDataExample() {
         val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot")
-            .whereEqualTo("city", currentCity)
+            .whereEqualTo("locality", currentCity)
             .get()
             .addOnSuccessListener { documents ->
                 parkingList.clear()
                 for (document in documents) {
                     parkingList.add(
                         ParkingLot(
+                            document["UID"] as String,
+                            document["locality"] as String,
+                            document["coordinates"] as GeoPoint,
+                            getAddress(document["coordinates"] as GeoPoint, context),
                             document["description"] as String,
-                            document["coordinates"] as GeoPoint
+                            document["private"] as Boolean,
                         )
                     )
                 }

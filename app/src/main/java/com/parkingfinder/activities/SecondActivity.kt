@@ -6,7 +6,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.parkingfinder.R
 import com.parkingfinder.fragments.ParkingList
+import com.parkingfinder.fragments.ParkingLotView
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
+import com.parkingfinder.models.ParkingLot
 
 
 class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
@@ -25,5 +27,17 @@ class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
         )
         addTransaction.commit()
     }
+
+    override fun addParkingLotViewFragment(parkingLot: ParkingLot?) {
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+        val tag: String = ParkingLotView::class.java.name
+        val replaceTransaction: FragmentTransaction = transaction.replace(
+            R.id.frame_layout_second, ParkingLotView(parkingLot!!), tag
+        )
+        replaceTransaction.addToBackStack(tag)
+        replaceTransaction.commit()
+    }
+
 
 }

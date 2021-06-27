@@ -15,6 +15,8 @@
     <string name="default_city_name">City name</string>
 
     <!--  View parking-lot -->
-    <string name="report_not_existing">Parking lot is not there...</string>
+    <string name="report_not_existing">Parking lot is not there…</string>
     <string name="edit_parking_lot">Edit</string>
+    <string name="private_lot">This parking lot is private</string>
+    <string name="public_lot">This parking lot is public</string>
 </resources>
