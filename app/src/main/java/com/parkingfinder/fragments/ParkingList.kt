@@ -58,6 +58,7 @@ class ParkingList : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+        getLocation()
     }
 
     override fun onCreateView(
@@ -204,7 +205,7 @@ class ParkingList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getLocation()
+
     }
 
     override fun onAttach(context: Context) {
