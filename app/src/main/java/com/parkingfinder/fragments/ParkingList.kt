@@ -23,6 +23,7 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.ktx.Firebase
 import com.parkingfinder.R
 import com.parkingfinder.activities.MainActivity
+import com.parkingfinder.activities.ThirdActivity
 import com.parkingfinder.adapters.ParkingLotAdapter
 import com.parkingfinder.helper.LocationOperations.Companion.getAddress
 import com.parkingfinder.helper.LocationOperations.Companion.getCity
@@ -72,6 +73,13 @@ class ParkingList : Fragment() {
         val recyclerView = view.findViewById<View>(R.id.rv_parking_lots) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = parkingAdapter
+
+        val btn_add= view.findViewById<View>(R.id.btn_add_parking)
+        btn_add.setOnClickListener {
+            val intent = Intent(context, ThirdActivity::class.java)
+            activity?.startActivity(intent)
+        }
+
         return view
     }
 

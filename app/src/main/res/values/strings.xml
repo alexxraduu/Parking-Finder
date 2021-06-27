@@ -19,4 +19,7 @@
     <string name="private_lot">This parking lot is private</string>
     <string name="public_lot">This parking lot is public</string>
     <string name="navigate">Open in Google Maps --></string>
+    <string name="add_parking_lot">Add</string>
+    <string name="hint_description">Description</string>
+    <string name="locate_me">Locate me</string>
 </resources>

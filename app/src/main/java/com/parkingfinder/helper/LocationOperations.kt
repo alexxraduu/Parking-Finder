@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.firestore.GeoPoint

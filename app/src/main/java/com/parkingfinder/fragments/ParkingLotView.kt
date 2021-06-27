@@ -85,7 +85,7 @@ class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapRead
 
     override fun onMapReady(googleMap: GoogleMap) {
         val coordinates =
-            LatLng(parkingLot.coordinates!!.latitude, parkingLot.coordinates.longitude)
+            LatLng(parkingLot.coordinates!!.latitude, parkingLot!!.coordinates!!.longitude)
         val cameraPosition = CameraPosition.Builder()
             .target(coordinates)
             .zoom(15f)

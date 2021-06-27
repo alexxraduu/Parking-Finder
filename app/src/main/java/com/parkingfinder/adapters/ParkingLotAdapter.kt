@@ -47,22 +47,7 @@ class ParkingLotAdapter(private val parkingLots: ArrayList<ParkingLot>, val onIt
             address.text=getAddress(parkingLot.coordinates!!,view.context)
             view.setOnClickListener { onItemClickedListener.openParkingLotView(parkingLot) }
 
-            val imageViewUrl =
-                "https://logodownload.org/wp-content/uploads/2018/01/google-maps-logo-0.png"
-            val imageLoader = VolleyConfigSingleton.getInstance(
-                imageView.context.applicationContext
-            ).imageLoader
-            imageLoader[imageViewUrl, object : ImageListener {
-                override fun onResponse(response: ImageContainer, isImmediate: Boolean) {
-                    imageView.setImageBitmap(response.bitmap)
-                }
-
-                override fun onErrorResponse(error: VolleyError) {}
-            }]
-
             imageView.setOnClickListener { onItemClickedListener.openMaps(parkingLot.coordinates) }
-
-
         }
 
         init {
