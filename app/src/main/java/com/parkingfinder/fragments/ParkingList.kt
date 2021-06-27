@@ -44,11 +44,11 @@ class ParkingList : Fragment() {
     var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList,
         object : OnItemClickedListener {
             override fun openMaps(location: GeoPoint?) {
-//                Log.d("aaa", "merge")
-//                val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
-//                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-//                mapIntent.setPackage("com.google.android.apps.maps")
-//                startActivity(mapIntent)
+                Log.d("aaa", "merge")
+                val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                startActivity(mapIntent)
             }
 
             override fun openParkingLotView(parkingLot: ParkingLot?) {

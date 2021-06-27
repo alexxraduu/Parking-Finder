@@ -15,7 +15,7 @@
         android:maxLines="2"
         android:padding="@dimen/default_padding"
         android:textSize="@dimen/size_address"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tool:text="Address" />
@@ -26,13 +26,25 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_space"
         android:ellipsize="end"
-        android:maxLines="4"
+        android:maxLines="3"
         android:padding="@dimen/default_padding"
         android:textSize="@dimen/size_description"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_address"
         tool:text="Description" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="W,1:1.5"
+        app:layout_constraintTop_toTopOf="@id/tv_address"
+        app:layout_constraintBottom_toBottomOf="@id/tv_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:clickable="true"
+        android:src="@drawable/abc_vector_test"/>
+
 
     <View
         android:layout_width="match_parent"
