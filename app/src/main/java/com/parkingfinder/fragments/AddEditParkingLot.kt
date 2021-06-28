@@ -75,8 +75,9 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
         }
 
         btnAdd!!.setOnClickListener {
-            createParkingLotObject()
-            saveObjectToDb()
+            if (createParkingLotObject()) {
+                saveObjectToDb()
+            }
         }
 
         return view
@@ -114,16 +115,28 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
             }
     }
 
-    fun createParkingLotObject() {
-        parkingLot = ParkingLot(
-            Firebase.auth.currentUser!!.uid,
-            LocationOperations.getLocality(coordinates, context),
-            coordinates,
-            null,
-            editDescription!!.text.toString(),
-            privateBtn!!.isChecked
-        )
+    fun createParkingLotObject(): Boolean {
+        if (editDescription!!.text.isNullOrBlank()) {
+            editDescription!!.error = "Required field!"
+            editDescription!!.requestFocus()
+        } else if (!privateBtn!!.isChecked && !publicBtn!!.isChecked) {
 
+            Toast.makeText(context, "Pick one. Parking must be public/private!", Toast.LENGTH_SHORT)
+                .show()
+
+        } else {
+            parkingLot = ParkingLot(
+                Firebase.auth.currentUser!!.uid,
+                LocationOperations.getLocality(coordinates, context),
+                coordinates,
+                null,
+                editDescription!!.text.toString(),
+                privateBtn!!.isChecked
+
+            )
+            return true
+        }
+        return false
     }
 
     companion object {
