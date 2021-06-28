@@ -50,10 +50,7 @@ class ParkingList : Fragment() {
             override fun openParkingLotView(parkingLot: ParkingLot?) {
                 activityFragmentCommunication!!.addParkingLotViewFragment(parkingLot)
             }
-
-
         })
-    var currentLocality: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,12 +78,11 @@ class ParkingList : Fragment() {
             val intent = Intent(context, ThirdActivity::class.java)
             activity?.startActivity(intent)
         }
-
         return view
     }
 
     fun updateToolbarTitle() {
-        toolbar?.title = currentLocality!!.toUpperCase()
+        toolbar?.title = LocationOperations.searchedLocality!!.toUpperCase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -96,7 +92,7 @@ class ParkingList : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                currentLocality = searchView.query.toString().toLowerCase()
+                LocationOperations.searchedLocality = searchView.query.toString().toLowerCase()
                 updateToolbarTitle()
                 getDataExample()
                 return false
@@ -132,7 +128,7 @@ class ParkingList : Fragment() {
     }
 
     private fun showResults() {
-        currentLocality = getLocality(
+        LocationOperations.searchedLocality = getLocality(
             myLocation,
             context
         ).toLowerCase()
@@ -162,7 +158,7 @@ class ParkingList : Fragment() {
     fun getDataExample() {
         val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot")
-            .whereEqualTo("locality", currentLocality)
+            .whereEqualTo("locality", LocationOperations.searchedLocality)
             .get()
             .addOnSuccessListener { documents ->
                 parkingList.clear()
@@ -205,7 +201,7 @@ class ParkingList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        updateToolbarTitle()
     }
 
     override fun onAttach(context: Context) {

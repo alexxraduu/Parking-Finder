@@ -2,11 +2,11 @@ package com.parkingfinder.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,6 +35,13 @@ class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapRead
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_parking_lot, container, false)
+
+
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar_back);
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
         val tvAddress: TextView = view.findViewById(R.id.tv_view_address)
         val tvDescription: TextView = view.findViewById(R.id.tv_view_description)
         val tvIsPrivate: TextView = view.findViewById(R.id.tv_view_private)

@@ -16,7 +16,9 @@ class LocationOperations {
 
 
     companion object {
-        var myLocation: GeoPoint =  GeoPoint(0.0,0.0)
+        var myLocation: GeoPoint = GeoPoint(0.0, 0.0)
+        var searchedLocality: String = ""
+
         fun openGoogleMaps(location: GeoPoint, context: Context?) {
             val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
@@ -39,10 +41,10 @@ class LocationOperations {
         }
 
         fun distanceBetweenGeoPoints(source: GeoPoint, destination: GeoPoint): Int {
-            val startPoint: Location = Location("")
+            val startPoint = Location("")
             startPoint.latitude = source.latitude
             startPoint.longitude = source.longitude
-            val endPoint: Location = Location("")
+            val endPoint = Location("")
             endPoint.latitude = destination.latitude
             endPoint.longitude = destination.longitude
             return startPoint.distanceTo(endPoint).toInt()

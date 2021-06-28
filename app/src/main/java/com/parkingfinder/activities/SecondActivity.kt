@@ -40,6 +40,4 @@ class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
     }
 
 
-
-
 }
