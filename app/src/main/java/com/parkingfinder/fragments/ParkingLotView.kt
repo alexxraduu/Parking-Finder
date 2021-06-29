@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -26,13 +27,14 @@ import com.parkingfinder.models.ParkingLot
 class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapReadyCallback {
 
     var activityFragmentCommunication: ActivityFragmentCommunication? = null
-    var id = ""
+    lateinit var id: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        id=""
     }
 
-    @SuppressLint("ResourceType")
+    @SuppressLint("ResourceType", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,13 +52,18 @@ class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapRead
         val tvIsPrivate: TextView = view.findViewById(R.id.tv_view_private)
         val tvNavigate: TextView = view.findViewById(R.id.tv_view_navigate)
         val tvReport: TextView = view.findViewById(R.id.tv_view_report)
-
+        val btnEdit: Button =  view.findViewById(R.id.tv_view_edit)
+        btnEdit.setOnClickListener {
+            Toast.makeText(context,"Not implemented yet!",Toast.LENGTH_SHORT).show()
+        }
+        tvReport.text = "${context?.getString(R.string.report_not_existing)} (${parkingLot.reports.toString()})"
         getDocId()
         tvReport.setOnClickListener {
             parkingLot.reports = parkingLot.reports!! + 1
             if(parkingLot.reports==15){
                 deleteParkingLotFromDB()
             }else{
+                tvReport.text="${context?.getString(R.string.report_not_existing)} (${parkingLot.reports.toString()})"
                 updateDoc()
             }
         }

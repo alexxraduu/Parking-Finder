@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/vpl_items_margin"
-                android:text="@string/report_not_existing"
+
                 android:clickable="true"
                 android:textColor="@color/selector_report"
                 android:textColorHint="@color/gradient_dark_blue"
@@ -100,3 +100,5 @@
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--                android:text="@string/report_not_existing"-->
