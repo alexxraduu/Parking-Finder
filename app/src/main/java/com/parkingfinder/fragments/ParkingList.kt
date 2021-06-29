@@ -58,6 +58,7 @@ class ParkingList : Fragment() {
 
             override fun openParkingLotView(parkingLot: ParkingLot?) {
                 activityFragmentCommunication!!.addParkingLotViewFragment(parkingLot)
+                //Toast.makeText(context,parkingLot!!.reports.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -88,6 +89,13 @@ class ParkingList : Fragment() {
             activity?.startActivity(intent)
         }
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateToolbarTitle()
+        getLocation()
+        parkingAdapter.notifyDataSetChanged()
     }
 
     fun updateToolbarTitle() {
@@ -230,6 +238,7 @@ class ParkingList : Fragment() {
                             getAddress(document["coordinates"] as GeoPoint, context),
                             document["description"] as String,
                             document["private"] as Boolean,
+                            (document["reported-as-not-existing"] as Number).toInt()
                         )
                     )
                 }
@@ -261,6 +270,8 @@ class ParkingList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateToolbarTitle()
+        getLocation()
+        parkingAdapter.notifyDataSetChanged()
     }
 
     override fun onAttach(context: Context) {

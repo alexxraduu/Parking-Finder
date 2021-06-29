@@ -13,5 +13,6 @@
 
     <color name="gradient_aqua">#60C1F6</color>
     <color name="gradient_dark_blue">#9A07314E</color>
+    <color name="gradient_light_blue">#9A3C739A</color>
     <color name="action_bar">#5FB2EB</color>
 </resources>

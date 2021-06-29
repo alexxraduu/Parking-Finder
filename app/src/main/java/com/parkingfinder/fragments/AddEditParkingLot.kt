@@ -91,7 +91,7 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
             "description" to parkingLot!!.description,
             "locality" to parkingLot!!.locality!!.toLowerCase(),
             "private" to parkingLot!!.isPrivate,
-            "reported-as-not-existing" to 0
+            "reported-as-not-existing" to parkingLot!!.reports
         )
         val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot").document()
@@ -120,6 +120,7 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
             }
     }
 
+
     fun createParkingLotObject(): Boolean {
         if (editDescription!!.text.isNullOrBlank()) {
             editDescription!!.error = "Required field!"
@@ -136,7 +137,8 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
                 coordinates,
                 null,
                 editDescription!!.text.toString(),
-                privateBtn!!.isChecked
+                privateBtn!!.isChecked,
+                0
 
             )
             return true

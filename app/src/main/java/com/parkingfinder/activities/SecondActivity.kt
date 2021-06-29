@@ -53,6 +53,7 @@ class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
         replaceTransaction.commit()
     }
 
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         CheckSettingsActivity.checkPhoneSettings(this)
