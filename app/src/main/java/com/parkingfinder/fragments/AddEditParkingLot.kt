@@ -28,6 +28,7 @@ import com.parkingfinder.helper.LocationOperations
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.models.ParkingLot
 import java.io.IOException
+import java.lang.NullPointerException
 
 
 class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
@@ -110,8 +111,12 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
     fun locate() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                coordinates = GeoPoint(location!!.latitude, location.longitude)
-                tvAddress!!.text = LocationOperations.getAddress(coordinates, context)
+                try {
+                    coordinates = GeoPoint(location!!.latitude, location.longitude)
+                    tvAddress!!.text = LocationOperations.getAddress(coordinates, context)
+                } catch (exception: NullPointerException) {
+
+                }
             }
     }
 

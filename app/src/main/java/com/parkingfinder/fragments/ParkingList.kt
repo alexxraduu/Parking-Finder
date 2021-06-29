@@ -33,6 +33,7 @@ import com.parkingfinder.helper.LocationOperations.Companion.openGoogleMaps
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.interfaces.OnItemClickedListener
 import com.parkingfinder.models.ParkingLot
+import java.lang.NullPointerException
 import java.util.*
 
 
@@ -121,9 +122,14 @@ class ParkingList : Fragment() {
     private fun getLocation() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                myLocation =
-                    GeoPoint(location!!.latitude, location.longitude)
-                showResults()
+               try {
+                   myLocation =
+                       GeoPoint(location!!.latitude, location.longitude)
+                   showResults()
+               }
+               catch(exception: NullPointerException) {
+
+               }
             }
     }
 

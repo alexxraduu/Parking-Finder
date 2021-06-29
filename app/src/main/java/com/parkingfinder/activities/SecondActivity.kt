@@ -1,9 +1,11 @@
 package com.parkingfinder.activities
 
+import android.location.LocationListener
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.location.LocationRequest
 import com.parkingfinder.R
 import com.parkingfinder.fragments.ParkingList
 import com.parkingfinder.fragments.ParkingLotView
@@ -39,5 +41,9 @@ class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
         replaceTransaction.commit()
     }
 
-
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        CheckSettingsActivity.checkPhoneSettings(this)
+        CheckSettingsActivity.checkPermissions(this)
+    }
 }

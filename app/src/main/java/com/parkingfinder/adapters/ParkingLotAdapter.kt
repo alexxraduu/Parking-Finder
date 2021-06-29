@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.parkingfinder.R
-import com.parkingfinder.fragments.ParkingList
 import com.parkingfinder.helper.LocationOperations
 import com.parkingfinder.helper.LocationOperations.Companion.getAddress
 import com.parkingfinder.interfaces.OnItemClickedListener

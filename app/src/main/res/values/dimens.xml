@@ -12,4 +12,7 @@
     <dimen name="vpl_tv_view_report">18sp</dimen>
     <dimen name="vpl_tv_view_navigate">18sp</dimen>
     <dimen name="size_distance">15sp</dimen>
+
+    <!-- Check settings activity -->
+    <dimen name="cs_tv_message">20sp</dimen>
 </resources>

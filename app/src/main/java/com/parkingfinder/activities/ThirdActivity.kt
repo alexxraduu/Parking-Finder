@@ -6,8 +6,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.parkingfinder.R
 import com.parkingfinder.fragments.AddEditParkingLot
-import com.parkingfinder.fragments.ParkingList
-import com.parkingfinder.fragments.ParkingLotView
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.models.ParkingLot
 
@@ -33,5 +31,9 @@ class ThirdActivity : AppCompatActivity(), ActivityFragmentCommunication {
         TODO("Not yet implemented")
     }
 
-
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        CheckSettingsActivity.checkPhoneSettings(this)
+        CheckSettingsActivity.checkPermissions(this)
+    }
 }
