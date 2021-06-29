@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.location.LocationRequest
 import com.parkingfinder.R
+import com.parkingfinder.fragments.DevelopersInfo
 import com.parkingfinder.fragments.ParkingList
 import com.parkingfinder.fragments.ParkingLotView
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
@@ -36,6 +37,17 @@ class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
         val tag: String = ParkingLotView::class.java.name
         val replaceTransaction: FragmentTransaction = transaction.replace(
             R.id.frame_layout_second, ParkingLotView(parkingLot!!), tag
+        )
+        replaceTransaction.addToBackStack(tag)
+        replaceTransaction.commit()
+    }
+
+    override fun addDevelopersInfoFragment(info: String?) {
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+        val tag: String = DevelopersInfo::class.java.name
+        val replaceTransaction: FragmentTransaction = transaction.replace(
+            R.id.frame_layout_second, DevelopersInfo(info!!), tag
         )
         replaceTransaction.addToBackStack(tag)
         replaceTransaction.commit()

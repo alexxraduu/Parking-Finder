@@ -27,7 +27,7 @@ class CheckSettingsActivity : AppCompatActivity() {
             return lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
         }
 
-        @SuppressLint("MissingPermission")
+
         fun checkNetworkServices(context: Context): Boolean {
             var cm: ConnectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

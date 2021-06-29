@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    @SuppressLint("MissingPermission")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(grantResults.isNotEmpty())
         if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
             finish()
         }
@@ -84,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         stopLocationUpdates()
     }
 
-    @SuppressLint("MissingPermission")
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         CheckSettingsActivity.checkPhoneSettings(this)

@@ -31,6 +31,10 @@ class ThirdActivity : AppCompatActivity(), ActivityFragmentCommunication {
         TODO("Not yet implemented")
     }
 
+    override fun addDevelopersInfoFragment(info: String?) {
+        TODO("Not yet implemented")
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         CheckSettingsActivity.checkPhoneSettings(this)

@@ -12,9 +12,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuItemCompat
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
@@ -33,13 +38,16 @@ import com.parkingfinder.helper.LocationOperations.Companion.openGoogleMaps
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.interfaces.OnItemClickedListener
 import com.parkingfinder.models.ParkingLot
-import java.lang.NullPointerException
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
 
 
 class ParkingList : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var activityFragmentCommunication: ActivityFragmentCommunication? = null
+    var infoText=""
     var toolbar: Toolbar? = null
     var parkingList: ArrayList<ParkingLot> = ArrayList<ParkingLot>()
     var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList,
@@ -87,7 +95,9 @@ class ParkingList : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_toolbar, menu)
+        if (menu.isEmpty()) {
+            inflater.inflate(R.menu.menu_toolbar, menu)
+        }
         val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = MenuItemCompat.getActionView(searchItem) as SearchView
 
@@ -115,21 +125,64 @@ class ParkingList : Fragment() {
             getLocation()
             false
         }
+        var about =  menu!!.findItem(R.id.item_about)
+        about.setOnMenuItemClickListener {
+            getDev()
+            false
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+    private fun getDev(){
+        val queue: RequestQueue = Volley.newRequestQueue(context)
+        var url = "https://mocki.io/v1/cc9faba3-12c6-44ae-a9e0-8acd60a144ff"
+
+        val stringRequest = StringRequest(
+            Request.Method.GET,
+            url,
+            {
+               response-> handleResponse(response)
+            },
+            { TODO("Not yet implemented") })
+        queue.add(stringRequest)
+    }
+
+    private fun handleResponse(response: String?) {
+        infoText=""
+        try {
+            val jsonArray = JSONArray(response)
+            for (index in 0 until jsonArray.length()) {
+                var obj: JSONObject = jsonArray.getJSONObject(index)
+                var name = obj.getString("name")
+                var email = obj.getString("email")
+                var birthDate = obj.getString("birthdate")
+                var faculty = obj.getString("faculty")
+
+                infoText+="\n\nName: $name" +
+                        "\nEmail: $email" +
+                        "\nDate of birth: $birthDate" +
+                        "\nFaculty: $faculty\n"
+
+            }
+            activityFragmentCommunication!!.addDevelopersInfoFragment(infoText)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+    }
+
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-               try {
-                   myLocation =
-                       GeoPoint(location!!.latitude, location.longitude)
-                   showResults()
-               }
-               catch(exception: NullPointerException) {
+                try {
+                    myLocation =
+                        GeoPoint(location!!.latitude, location.longitude)
+                    showResults()
+                } catch (exception: NullPointerException) {
 
-               }
+                }
             }
     }
 
