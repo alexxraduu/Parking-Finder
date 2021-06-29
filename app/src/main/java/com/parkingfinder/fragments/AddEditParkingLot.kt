@@ -33,7 +33,7 @@ import java.lang.NullPointerException
 
 class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
     lateinit var parkingLot: ParkingLot
-    lateinit var coordinates: GeoPoint
+    var coordinates: GeoPoint = GeoPoint(21.305611, -157.858566)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var activityFragmentCommunication: ActivityFragmentCommunication? = null
     var tvAddress: TextView? = null
