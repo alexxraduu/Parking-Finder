@@ -91,12 +91,6 @@ class ParkingList : Fragment() {
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateToolbarTitle()
-        getLocation()
-        parkingAdapter.notifyDataSetChanged()
-    }
 
     fun updateToolbarTitle() {
         toolbar?.title = LocationOperations.searchedLocality!!.toUpperCase()
@@ -270,10 +264,7 @@ class ParkingList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateToolbarTitle()
-        getLocation()
-        parkingAdapter.notifyDataSetChanged()
     }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is ActivityFragmentCommunication) {

@@ -17,6 +17,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.parkingfinder.R
 import com.parkingfinder.activities.SecondActivity
+import com.parkingfinder.helper.PrefConfig
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 
 
@@ -26,6 +27,7 @@ class LoginRegister : Fragment() {
     private var btn_login: Button? = null
     private var et_email: EditText? = null
     private var et_password: EditText? = null
+    private var emailString: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,8 @@ class LoginRegister : Fragment() {
                             try {
                                 throw task.exception!!
                             } catch (e: FirebaseAuthWeakPasswordException) {
-                                et_password?.error = "Password is too weak! Minimum 6 characters required."
+                                et_password?.error =
+                                    "Password is too weak! Minimum 6 characters required."
                                 et_password?.requestFocus()
                             } catch (e: FirebaseAuthUserCollisionException) {
                                 et_email?.error = "E-mail is already in use!"
@@ -82,6 +85,7 @@ class LoginRegister : Fragment() {
                 Firebase.auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            PrefConfig.saveEmailInPref(requireContext(), email)
                             Log.d(tag, "signInWithEmail:success")
                             openSecondActivity()
                         } else {
@@ -126,6 +130,10 @@ class LoginRegister : Fragment() {
         btn_login = view.findViewById(R.id.btn_login)
         et_email = view.findViewById(R.id.et_email)
         et_password = view.findViewById(R.id.et_password)
+        if (!PrefConfig.loadEmailFromPref(requireContext()).isNullOrBlank()) {
+            emailString = PrefConfig.loadEmailFromPref(requireContext())!!
+            et_email?.append(emailString)
+        }
         return view
     }
 

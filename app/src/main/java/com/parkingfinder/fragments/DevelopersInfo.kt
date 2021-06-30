@@ -37,6 +37,10 @@ class DevelopersInfo(private val info: String) : Fragment() {
         val tvInfo: TextView= view.findViewById(R.id.tv_info)
         tvInfo.text=info
 
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar_back_dev);
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
 
         return view
     }
