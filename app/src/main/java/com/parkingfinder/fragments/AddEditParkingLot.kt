@@ -82,6 +82,10 @@ class AddEditParkingLot : Fragment(), OnMapReadyCallback {
             }
         }
 
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar_back_add)
+        toolbar.setNavigationOnClickListener {
+            activity?.finish()
+        }
         return view
     }
 
