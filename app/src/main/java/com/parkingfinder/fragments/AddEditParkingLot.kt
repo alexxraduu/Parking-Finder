@@ -82,7 +82,7 @@ class AddEditParkingLot : Fragment(), OnMapReadyCallback {
             }
         }
 
-        val toolbar: Toolbar = view.findViewById(R.id.toolbar_back_add)
+        var toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.toolbar_back_add)
         toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
