@@ -16,32 +16,27 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.parkingfinder.R
-import com.parkingfinder.activities.SecondActivity
+import com.parkingfinder.activities.ParkingActivity
 import com.parkingfinder.helper.PrefConfig
 import com.parkingfinder.interfaces.ActivityFragmentCommunication
 
-
 class LoginRegister : Fragment() {
     private var activityFragmentCommunication: ActivityFragmentCommunication? = null
-    private var btn_register: Button? = null
-    private var btn_login: Button? = null
-    private var et_email: EditText? = null
-    private var et_password: EditText? = null
+    private var btnRegister: Button? = null
+    private var btnLogin: Button? = null
+    private var etEmail: EditText? = null
+    private var etPassword: EditText? = null
     private var emailString: String = ""
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     private fun register(email: String, password: String) {
         when {
-            email.isNullOrEmpty() -> {
-                et_email?.error = "E-mail can't be empty!"
-                et_email?.requestFocus()
+            email.isEmpty() -> {
+                etEmail?.error = "E-mail can't be empty!"
+                etEmail?.requestFocus()
             }
-            password.isNullOrEmpty() -> {
-                et_password?.error = "Password can't be empty!"
-                et_password?.requestFocus()
+            password.isEmpty() -> {
+                etPassword?.error = "Password can't be empty!"
+                etPassword?.requestFocus()
             }
             else -> {
                 val tag = "Register"
@@ -54,15 +49,15 @@ class LoginRegister : Fragment() {
                             try {
                                 throw task.exception!!
                             } catch (e: FirebaseAuthWeakPasswordException) {
-                                et_password?.error =
+                                etPassword?.error =
                                     "Password is too weak! Minimum 6 characters required."
-                                et_password?.requestFocus()
+                                etPassword?.requestFocus()
                             } catch (e: FirebaseAuthUserCollisionException) {
-                                et_email?.error = "E-mail is already in use!"
-                                et_email?.requestFocus()
+                                etEmail?.error = "E-mail is already in use!"
+                                etEmail?.requestFocus()
                             } catch (e: FirebaseAuthInvalidCredentialsException) {
-                                et_email?.error = "Invalid e-mail!"
-                                et_email?.requestFocus()
+                                etEmail?.error = "Invalid e-mail!"
+                                etEmail?.requestFocus()
                             }
                         }
                     }
@@ -72,13 +67,13 @@ class LoginRegister : Fragment() {
 
     private fun login(email: String, password: String) {
         when {
-            email.isNullOrEmpty() -> {
-                et_email?.error = "E-mail can't be empty!"
-                et_email?.requestFocus()
+            email.isEmpty() -> {
+                etEmail?.error = "E-mail can't be empty!"
+                etEmail?.requestFocus()
             }
-            password.isNullOrEmpty() -> {
-                et_password?.error = "Password can't be empty!"
-                et_password?.requestFocus()
+            password.isEmpty() -> {
+                etPassword?.error = "Password can't be empty!"
+                etPassword?.requestFocus()
             }
             else -> {
                 val tag = "Login"
@@ -92,8 +87,8 @@ class LoginRegister : Fragment() {
                             try {
                                 throw task.exception!!
                             } catch (e: FirebaseAuthInvalidUserException) {
-                                et_email?.error = "This account does not exist!"
-                                et_email?.requestFocus()
+                                etEmail?.error = "This account does not exist!"
+                                etEmail?.requestFocus()
                             } catch (e: FirebaseAuthInvalidCredentialsException) {
                                 Toast.makeText(
                                     context,
@@ -116,7 +111,7 @@ class LoginRegister : Fragment() {
     }
 
     private fun openSecondActivity() {
-        val intent = Intent(context, SecondActivity::class.java)
+        val intent = Intent(context, ParkingActivity::class.java)
         activity?.startActivity(intent)
         activity?.finish()
     }
@@ -124,30 +119,26 @@ class LoginRegister : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.fragment_login_register, container, false)
-        btn_register = view.findViewById(R.id.btn_register)
-        btn_login = view.findViewById(R.id.btn_login)
-        et_email = view.findViewById(R.id.et_email)
-        et_password = view.findViewById(R.id.et_password)
+        btnRegister = view.findViewById(R.id.btn_register)
+        btnLogin = view.findViewById(R.id.btn_login)
+        etEmail = view.findViewById(R.id.et_email)
+        etPassword = view.findViewById(R.id.et_password)
         if (!PrefConfig.loadEmailFromPref(requireContext()).isNullOrBlank()) {
             emailString = PrefConfig.loadEmailFromPref(requireContext())!!
-            et_email?.append(emailString)
+            etEmail?.append(emailString)
         }
         return view
     }
 
-    companion object {
-        fun newInstance() = LoginRegister()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btn_register?.setOnClickListener {
-            register(et_email?.text.toString(), et_password?.text.toString())
+        btnRegister?.setOnClickListener {
+            register(etEmail?.text.toString(), etPassword?.text.toString())
         }
-        btn_login?.setOnClickListener {
-            login(et_email?.text.toString(), et_password?.text.toString())
+        btnLogin?.setOnClickListener {
+            login(etEmail?.text.toString(), etPassword?.text.toString())
         }
     }
 

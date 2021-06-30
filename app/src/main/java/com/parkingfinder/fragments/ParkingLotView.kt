@@ -25,24 +25,23 @@ import com.parkingfinder.models.ParkingLot
 
 
 class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapReadyCallback {
-
-    var activityFragmentCommunication: ActivityFragmentCommunication? = null
+    private var activityFragmentCommunication: ActivityFragmentCommunication? = null
     lateinit var id: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        id=""
+        id = ""
     }
 
     @SuppressLint("ResourceType", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.fragment_parking_lot, container, false)
 
 
-        val toolbar: Toolbar = view.findViewById(R.id.toolbar_back);
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar_back)
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
@@ -52,18 +51,20 @@ class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapRead
         val tvIsPrivate: TextView = view.findViewById(R.id.tv_view_private)
         val tvNavigate: TextView = view.findViewById(R.id.tv_view_navigate)
         val tvReport: TextView = view.findViewById(R.id.tv_view_report)
-        val btnEdit: Button =  view.findViewById(R.id.tv_view_edit)
+        val btnEdit: Button = view.findViewById(R.id.tv_view_edit)
         btnEdit.setOnClickListener {
-            Toast.makeText(context,"Not implemented yet!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Not implemented yet!", Toast.LENGTH_SHORT).show()
         }
-        tvReport.text = "${context?.getString(R.string.report_not_existing)} (${parkingLot.reports.toString()})"
+        tvReport.text =
+            "${context?.getString(R.string.report_not_existing)} (${parkingLot.reports.toString()})"
         getDocId()
         tvReport.setOnClickListener {
             parkingLot.reports = parkingLot.reports!! + 1
-            if(parkingLot.reports==15){
+            if (parkingLot.reports == 15) {
                 deleteParkingLotFromDB()
-            }else{
-                tvReport.text="${context?.getString(R.string.report_not_existing)} (${parkingLot.reports.toString()})"
+            } else {
+                tvReport.text =
+                    "${context?.getString(R.string.report_not_existing)} (${parkingLot.reports.toString()})"
                 updateDoc()
             }
         }
@@ -90,21 +91,7 @@ class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapRead
         return view
     }
 
-
-    companion object {
-        fun newInstance(parkingLot: ParkingLot): ParkingLotView {
-            val args = Bundle()
-            val fragment = ParkingLotView(parkingLot)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    fun updateDoc() {
+    private fun updateDoc() {
         val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot")
             .document(id)
@@ -114,7 +101,7 @@ class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapRead
             .addOnFailureListener { e -> Log.w("FIREBASE", "Error updating document", e) }
     }
 
-    fun deleteParkingLotFromDB(){
+    private fun deleteParkingLotFromDB() {
         val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot").document(id)
             .delete()
@@ -123,16 +110,14 @@ class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapRead
         requireActivity().supportFragmentManager.popBackStack()
     }
 
-    fun getDocId() {
+    private fun getDocId() {
         val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot")
             .whereEqualTo("coordinates", parkingLot.coordinates)
             .get()
             .addOnSuccessListener { documents ->
-
                 for (document in documents) {
                     id = document.id
-                    //Toast.makeText(context,document.id,Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->
@@ -150,7 +135,7 @@ class ParkingLotView(private val parkingLot: ParkingLot) : Fragment(), OnMapRead
 
     override fun onMapReady(googleMap: GoogleMap) {
         val coordinates =
-            LatLng(parkingLot.coordinates!!.latitude, parkingLot!!.coordinates!!.longitude)
+            LatLng(parkingLot.coordinates!!.latitude, parkingLot.coordinates!!.longitude)
         val cameraPosition = CameraPosition.Builder()
             .target(coordinates)
             .zoom(15f)

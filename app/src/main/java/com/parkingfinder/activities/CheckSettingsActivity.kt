@@ -22,14 +22,14 @@ class CheckSettingsActivity : AppCompatActivity() {
 
     companion object {
         fun checkLocationServices(context: Context): Boolean {
-            var lm: LocationManager =
+            val lm: LocationManager =
                 (context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?)!!
             return lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
         }
 
-
+        @SuppressLint("MissingPermission")
         fun checkNetworkServices(context: Context): Boolean {
-            var cm: ConnectivityManager =
+            val cm: ConnectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
             return activeNetwork?.isConnectedOrConnecting == true
@@ -37,7 +37,7 @@ class CheckSettingsActivity : AppCompatActivity() {
 
         private fun openCheckSettingsActivity(context: Context) {
             val intent = Intent(context, CheckSettingsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             context.startActivity(intent)
         }
 
@@ -74,13 +74,13 @@ class CheckSettingsActivity : AppCompatActivity() {
         btnExit = findViewById(R.id.btn_exit)
         btnContinue = findViewById(R.id.btn_continue)
 
-        btnExit?.setOnClickListener() {
+        btnExit?.setOnClickListener {
             exitApp()
         }
 
-        btnContinue?.setOnClickListener() {
+        btnContinue?.setOnClickListener {
             if (checkLocationServices(this) && checkNetworkServices(this)) {
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, LoginRegisterActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
@@ -90,6 +90,6 @@ class CheckSettingsActivity : AppCompatActivity() {
     }
 
     private fun exitApp() {
-        finishAffinity();
+        finishAffinity()
     }
 }

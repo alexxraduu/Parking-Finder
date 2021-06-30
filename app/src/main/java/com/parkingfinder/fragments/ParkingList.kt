@@ -27,8 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.ktx.Firebase
 import com.parkingfinder.R
-import com.parkingfinder.activities.MainActivity
-import com.parkingfinder.activities.ThirdActivity
+import com.parkingfinder.activities.LoginRegisterActivity
+import com.parkingfinder.activities.AddEditActivity
 import com.parkingfinder.adapters.ParkingLotAdapter
 import com.parkingfinder.helper.LocationOperations
 import com.parkingfinder.helper.LocationOperations.Companion.getAddress
@@ -43,14 +43,13 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
-
 class ParkingList : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var activityFragmentCommunication: ActivityFragmentCommunication? = null
-    var infoText=""
-    var toolbar: Toolbar? = null
-    var parkingList: ArrayList<ParkingLot> = ArrayList<ParkingLot>()
-    var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList,
+    private var infoText = ""
+    private var toolbar: Toolbar? = null
+    private var parkingList: ArrayList<ParkingLot> = ArrayList<ParkingLot>()
+    private var parkingAdapter: ParkingLotAdapter = ParkingLotAdapter(parkingList,
         object : OnItemClickedListener {
             override fun openMaps(location: GeoPoint?) {
                 openGoogleMaps(location!!, context)
@@ -58,7 +57,6 @@ class ParkingList : Fragment() {
 
             override fun openParkingLotView(parkingLot: ParkingLot?) {
                 activityFragmentCommunication!!.addParkingLotViewFragment(parkingLot)
-                //Toast.makeText(context,parkingLot!!.reports.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -71,7 +69,7 @@ class ParkingList : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.fragment_parking_list, container, false)
 
         toolbar = view.findViewById<View>(R.id.toolbar) as Toolbar
@@ -83,17 +81,17 @@ class ParkingList : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = parkingAdapter
 
-        val btn_add = view.findViewById<View>(R.id.btn_add_parking)
-        btn_add.setOnClickListener {
-            val intent = Intent(context, ThirdActivity::class.java)
-            activity?.startActivity(intent)
+        val btnAdd = view.findViewById<View>(R.id.btn_add_parking)
+        btnAdd.setOnClickListener {
+            val intent = Intent(context, AddEditActivity::class.java)
+            activity.startActivity(intent)
         }
         return view
     }
 
 
     fun updateToolbarTitle() {
-        toolbar?.title = LocationOperations.searchedLocality!!.toUpperCase()
+        toolbar?.title = LocationOperations.searchedLocality.toUpperCase(Locale.ROOT)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -105,7 +103,8 @@ class ParkingList : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                LocationOperations.searchedLocality = searchView.query.toString().toLowerCase()
+                LocationOperations.searchedLocality =
+                    searchView.query.toString().toLowerCase(Locale.ROOT)
                 updateToolbarTitle()
                 getDataExample()
                 return false
@@ -116,18 +115,18 @@ class ParkingList : Fragment() {
             }
         })
 
-        val logoutItem = menu!!.findItem(R.id.item_logout)
+        val logoutItem = menu.findItem(R.id.item_logout)
         logoutItem.setOnMenuItemClickListener {
             logout()
             false
         }
 
-        var locate = menu!!.findItem(R.id.action_locate)
+        val locate = menu.findItem(R.id.action_locate)
         locate.setOnMenuItemClickListener {
             getLocation()
             false
         }
-        var about =  menu!!.findItem(R.id.item_about)
+        val about = menu.findItem(R.id.item_about)
         about.setOnMenuItemClickListener {
             getDev()
             false
@@ -136,32 +135,32 @@ class ParkingList : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun getDev(){
+    private fun getDev() {
         val queue: RequestQueue = Volley.newRequestQueue(context)
-        var url = "https://mocki.io/v1/cc9faba3-12c6-44ae-a9e0-8acd60a144ff"
+        val url = "https://mocki.io/v1/cc9faba3-12c6-44ae-a9e0-8acd60a144ff"
 
         val stringRequest = StringRequest(
             Request.Method.GET,
             url,
-            {
-               response-> handleResponse(response)
+            { response ->
+                handleResponse(response)
             },
             { TODO("Not yet implemented") })
         queue.add(stringRequest)
     }
 
     private fun handleResponse(response: String?) {
-        infoText=""
+        infoText = ""
         try {
             val jsonArray = JSONArray(response)
             for (index in 0 until jsonArray.length()) {
-                var obj: JSONObject = jsonArray.getJSONObject(index)
-                var name = obj.getString("name")
-                var email = obj.getString("email")
-                var birthDate = obj.getString("birthdate")
-                var faculty = obj.getString("faculty")
+                val obj: JSONObject = jsonArray.getJSONObject(index)
+                val name = obj.getString("name")
+                val email = obj.getString("email")
+                val birthDate = obj.getString("birthdate")
+                val faculty = obj.getString("faculty")
 
-                infoText+="\n\nName: $name" +
+                infoText += "\n\nName: $name" +
                         "\nEmail: $email" +
                         "\nDate of birth: $birthDate" +
                         "\nFaculty: $faculty\n"
@@ -192,13 +191,9 @@ class ParkingList : Fragment() {
         LocationOperations.searchedLocality = getLocality(
             myLocation,
             context
-        ).toLowerCase()
+        ).toLowerCase(Locale.ROOT)
         getDataExample()
         updateToolbarTitle()
-    }
-
-    companion object {
-        fun newInstance() = ParkingList()
     }
 
     private fun logout() {
@@ -211,7 +206,7 @@ class ParkingList : Fragment() {
             )
                 .show()
         }
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, LoginRegisterActivity::class.java)
         activity?.startActivity(intent)
         activity?.finish()
     }
@@ -265,6 +260,7 @@ class ParkingList : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         updateToolbarTitle()
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is ActivityFragmentCommunication) {

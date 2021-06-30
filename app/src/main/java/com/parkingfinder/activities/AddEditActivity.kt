@@ -10,7 +10,7 @@ import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.models.ParkingLot
 
 
-class ThirdActivity : AppCompatActivity(), ActivityFragmentCommunication {
+class AddEditActivity : AppCompatActivity(), ActivityFragmentCommunication {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_third)

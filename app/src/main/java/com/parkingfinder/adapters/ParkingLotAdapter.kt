@@ -13,7 +13,6 @@ import com.parkingfinder.interfaces.OnItemClickedListener
 import com.parkingfinder.models.ParkingLot
 import java.util.*
 
-
 class ParkingLotAdapter(
     private val parkingLots: ArrayList<ParkingLot>,
     val onItemClickedListener: OnItemClickedListener

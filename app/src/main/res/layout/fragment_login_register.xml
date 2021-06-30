@@ -9,14 +9,14 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/z_logo_parking_finder"
         android:text="@string/app_name"
         android:textSize="@dimen/app_title"
         app:layout_constraintBottom_toTopOf="@id/et_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2"
-        android:src="@drawable/z_logo_parking_finder"/>
+        app:layout_constraintVertical_bias="0.2" />
 
     <EditText
         android:id="@+id/et_email"

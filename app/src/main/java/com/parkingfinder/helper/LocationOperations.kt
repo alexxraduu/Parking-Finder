@@ -17,7 +17,7 @@ class LocationOperations {
         var searchedLocality: String = ""
 
         fun openGoogleMaps(location: GeoPoint, context: Context?) {
-            val gmmIntentUri = Uri.parse("geo:0,0?q=${location!!.latitude},${location!!.longitude}")
+            val gmmIntentUri = Uri.parse("geo:0,0?q=${location.latitude},${location.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context?.startActivity(mapIntent)
@@ -25,15 +25,15 @@ class LocationOperations {
 
         fun getLocality(geoPoint: GeoPoint, context: Context?): String {
             val geoCoder = Geocoder(context, Locale.getDefault())
-            var addresses: List<Address> =
-                geoCoder.getFromLocation(geoPoint!!.latitude, geoPoint!!.longitude, 1)
+            val addresses: List<Address> =
+                geoCoder.getFromLocation(geoPoint.latitude, geoPoint.longitude, 1)
             return addresses[0].locality
         }
 
         fun getAddress(geoPoint: GeoPoint, context: Context?): String {
             val geoCoder = Geocoder(context, Locale.getDefault())
-            var addresses: List<Address> =
-                geoCoder.getFromLocation(geoPoint!!.latitude, geoPoint!!.longitude, 1)
+            val addresses: List<Address> =
+                geoCoder.getFromLocation(geoPoint.latitude, geoPoint.longitude, 1)
             return addresses[0].getAddressLine(0).toString()
         }
 

@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ParkingList"
-    android:background="@color/light_blue">
+    android:background="@color/light_blue"
+    tools:context=".fragments.ParkingList">
 
     <androidx.appcompat.widget.Toolbar
-        app:title="@string/default_city_name"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,28 +17,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/default_city_name" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_parking_lots"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_parking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:contentDescription="@string/add_parking_lot"
         android:layout_margin="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/add_parking_lot"
+        android:src="@drawable/ic_add_parking_lot"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:maxImageSize="40dp"
-        android:src="@drawable/ic_add_parking_lot"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="40dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

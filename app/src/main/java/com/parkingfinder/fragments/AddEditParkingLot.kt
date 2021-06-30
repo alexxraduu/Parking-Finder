@@ -29,19 +29,20 @@ import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.models.ParkingLot
 import java.io.IOException
 import java.lang.NullPointerException
+import java.util.*
 
 
-class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
-    lateinit var parkingLot: ParkingLot
-    var coordinates: GeoPoint = GeoPoint(21.305611, -157.858566)
+class AddEditParkingLot : Fragment(), OnMapReadyCallback {
+    private lateinit var parkingLot: ParkingLot
+    private var coordinates: GeoPoint = GeoPoint(21.305611, -157.858566)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    var activityFragmentCommunication: ActivityFragmentCommunication? = null
-    var tvAddress: TextView? = null
-    var privateBtn: RadioButton? = null
-    var publicBtn: RadioButton? = null
-    var btnLocate: Button? = null
-    var btnAdd: Button? = null
-    var editDescription: EditText? = null
+    private var activityFragmentCommunication: ActivityFragmentCommunication? = null
+    private var tvAddress: TextView? = null
+    private var privateBtn: RadioButton? = null
+    private var publicBtn: RadioButton? = null
+    private var btnLocate: Button? = null
+    private var btnAdd: Button? = null
+    private var editDescription: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,7 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.fragment_add_edit_parking_lot, container, false)
         tvAddress = view.findViewById(R.id.tv_add_address)
         privateBtn = view.findViewById(R.id.radio_private)
@@ -86,12 +87,12 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
 
     private fun saveObjectToDb() {
         val parkingLotData = hashMapOf(
-            "UID" to parkingLot!!.UID,
-            "coordinates" to parkingLot!!.coordinates,
-            "description" to parkingLot!!.description,
-            "locality" to parkingLot!!.locality!!.toLowerCase(),
-            "private" to parkingLot!!.isPrivate,
-            "reported-as-not-existing" to parkingLot!!.reports
+            "UID" to parkingLot.UID,
+            "coordinates" to parkingLot.coordinates,
+            "description" to parkingLot.description,
+            "locality" to parkingLot.locality!!.toLowerCase(Locale.ROOT),
+            "private" to parkingLot.isPrivate,
+            "reported-as-not-existing" to parkingLot.reports
         )
         val db = FirebaseFirestore.getInstance()
         db.collection("parking-lot").document()
@@ -99,11 +100,12 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
             .addOnSuccessListener {
                 Log.d("Add", "DocumentSnapshot successfully written!")
                 Toast.makeText(context, "Thank you for adding a parking lot!", Toast.LENGTH_LONG)
+                    .show()
                 activity?.finish()
             }
             .addOnFailureListener { e ->
                 Log.w("Add", "Error writing document", e)
-                Toast.makeText(context, "An error occurred!", Toast.LENGTH_SHORT)
+                Toast.makeText(context, "An error occurred!", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -121,7 +123,7 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
     }
 
 
-    fun createParkingLotObject(): Boolean {
+    private fun createParkingLotObject(): Boolean {
         if (editDescription!!.text.isNullOrBlank()) {
             editDescription!!.error = "Required field!"
             editDescription!!.requestFocus()
@@ -146,19 +148,6 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
         return false
     }
 
-    companion object {
-        fun newInstance(): AddEditParkingLot {
-            val args = Bundle()
-            val fragment = AddEditParkingLot()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is ActivityFragmentCommunication) {
@@ -167,7 +156,7 @@ class AddEditParkingLot() : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        val coordinatesLatLng = LatLng(coordinates!!.latitude, coordinates!!.longitude)
+        val coordinatesLatLng = LatLng(coordinates.latitude, coordinates.longitude)
         val cameraPosition = CameraPosition.Builder()
             .target(coordinatesLatLng)
             .zoom(17f)

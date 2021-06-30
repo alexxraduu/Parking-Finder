@@ -16,8 +16,7 @@ import com.parkingfinder.interfaces.ActivityFragmentCommunication
 import com.parkingfinder.models.ParkingLot
 import com.parkingfinder.services.LocationBackgroundService
 
-
-class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
+class ParkingActivity : AppCompatActivity(), ActivityFragmentCommunication {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
@@ -71,7 +70,6 @@ class SecondActivity : AppCompatActivity(), ActivityFragmentCommunication {
         replaceTransaction.addToBackStack(tag)
         replaceTransaction.commit()
     }
-
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)

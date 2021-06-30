@@ -32,15 +32,15 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".activities.SecondActivity"
+            android:name=".activities.ParkingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ThirdActivity"
+            android:name=".activities.AddEditActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.LoginRegisterActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
